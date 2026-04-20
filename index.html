@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat with AI offline - WebLLM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Chat with LLMs in a pc-themed interface, running locally in your browser."
+    />
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Chat with AI offline - WebLLM" />
+    <meta
+      property="og:description"
+      content="Chat with LLMs locally in a pc-themed interface, running in your browser."
+    />
+    <meta property="og:image" content="images/og-image.png" />
+    <meta property="og:url" content="https://chat.ebenezerdon.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chat with AI offline - WebLLM" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@ebenezerDN" />
+    <meta name="twitter:creator" content="@ebenezerDN" />
+    <link rel="stylesheet" href="css/pc-theme.css" />
+    <link rel="stylesheet" href="css/icons.css" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="pc-desktop">
+      <!-- Start Menu -->
+      <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">
+          <h2>Hey, let's connect!</h2>
+        </div>
+
+        <div class="social-media-grid">
+          <a
+            href="https://github.com/ebenezerdon"
+            target="_blank"
+            class="social-media-item github"
+          >
+            <span class="icon icon-github"></span>
+            <span>GitHub</span>
+          </a>
+          <a
+            href="https://linkedin.com/in/ebenezerdon"
+            target="_blank"
+            class="social-media-item linkedin"
+          >
+            <span class="icon icon-linkedin"></span>
+            <span>LinkedIn</span>
+          </a>
+          <a
+            href="https://x.com/ebenezerDN"
+            target="_blank"
+            class="social-media-item x"
+          >
+            <span class="icon icon-x"></span>
+            <span>X</span>
+          </a>
+          <a
+            href="https://youtube.com/c/ebenezerdon"
+            target="_blank"
+            class="social-media-item youtube"
+          >
+            <span class="icon icon-youtube"></span>
+            <span>YouTube</span>
+          </a>
+          <a
+            href="https://facebook.com/ebenezerdonpage"
+            target="_blank"
+            class="social-media-item facebook"
+          >
+            <span class="icon icon-facebook"></span>
+            <span>Facebook</span>
+          </a>
+          <a
+            href="mailto:webllm@ebenezerdon.com"
+            class="social-media-item contact"
+          >
+            <span class="icon icon-email"></span>
+            <span>Email</span>
+          </a>
+        </div>
+
+        <div class="start-menu-footer">
+          <div class="user-avatar">
+            <img src="images/ebenezer-don.jpg" alt="Ebenezer Don" />
+          </div>
+          <div class="user-info">
+            <div class="user-name">Ebenezer Don</div>
+            <div class="user-status">Online</div>
+          </div>
+          <button class="power-button" title="Power">
+            <span class="icon icon-power"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- App Window for the Chat Application -->
+      <div class="app-window" id="webLlmAppWindow">
+        <div class="app-window-titlebar" id="appWindowTitlebar">
+          <div class="app-window-titlebar-title">
+            <span class="icon icon-app-chat"></span>
+            <span>WebLLM Chat</span>
+          </div>
+          <div class="app-window-controls">
+            <button class="minimize-button" title="Minimize">
+              <span class="icon icon-minimize"></span>
+            </button>
+            <button class="maximize-button" title="Maximize">
+              <span class="icon icon-maximize"></span>
+            </button>
+            <button class="close-button" title="Close">
+              <span class="icon icon-close"></span>
+            </button>
+          </div>
+        </div>
+        <div class="app-window-content">
+          <!-- Main column - chat interface -->
+          <div class="main-column">
+            <h1>
+              <span class="icon icon-app-chat"></span>Chat with AI offline
+            </h1>
+            <select id="model-select"></select>
+
+            <div id="model-info" class="model-info" style="display: none">
+              <div class="model-details">
+                <div class="model-detail">
+                  <span class="icon icon-download"></span>
+                  <span class="model-detail-label">Download Size:</span>
+                  <span id="model-download-size" class="model-detail-value"
+                    >--</span
+                  >
+                </div>
+                <div class="model-detail">
+                  <span class="icon icon-memory"></span>
+                  <span class="model-detail-label">VRAM Required:</span>
+                  <span id="model-vram" class="model-detail-value">--</span>
+                </div>
+                <div class="model-detail">
+                  <span class="icon icon-parameter"></span>
+                  <span class="model-detail-label">Parameters:</span>
+                  <span id="model-params" class="model-detail-value">--</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              id="resource-warning"
+              class="resource-warning"
+              style="display: none"
+            >
+              <span class="icon icon-warning"></span>
+              <div class="content">
+                <strong>Note:</strong> Large models require significant GPU
+                resources. If your device has limited capabilities, consider
+                using smaller models.
+              </div>
+              <button
+                class="dismiss-btn"
+                id="dismiss-warning"
+                aria-label="Dismiss"
+              >
+                ×
+              </button>
+            </div>
+
+            <div id="top-status-container" class="top-status-container">
+              <div id="top-status" class="top-status"></div>
+              <div id="progress-container" style="display: none">
+                <div class="progress-bar">
+                  <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <div id="progress-text" class="progress-text">0%</div>
+              </div>
+            </div>
+
+            <div id="output">Initializing AI assistant...</div>
+            <form id="chat-form">
+              <input
+                id="prompt"
+                placeholder="Type your message here..."
+                disabled
+              />
+              <button id="submit-button" type="submit" disabled>
+                <span class="icon icon-send"></span>Send
+              </button>
+            </form>
+
+            <div class="button-container">
+              <button
+                id="clear-chat"
+                class="secondary-button"
+                title="Clear conversation history"
+              >
+                <span class="icon icon-clear"></span>Clear Chat
+              </button>
+            </div>
+          </div>
+
+          <!-- Sidebar column - status and debug logs -->
+          <div class="sidebar-column">
+            <h3><span class="icon icon-status"></span>Status Panel</h3>
+            <!-- Copy of the progress display from main window -->
+            <div id="status-container" class="top-status-container">
+              <div id="status" class="top-status"></div>
+              <div id="status-progress-container" style="display: none">
+                <div class="progress-bar">
+                  <div id="status-progress-fill" class="progress-fill"></div>
+                </div>
+                <div id="status-progress-text" class="progress-text">0%</div>
+              </div>
+            </div>
+            <h3><span class="icon icon-debug"></span>Debug Log</h3>
+            <div id="debug"></div>
+          </div>
+        </div>
+      </div>
+      <!-- End App Window -->
+      <!-- Log Window placeholder - will be dynamically managed -->
+    </div>
+
+    <div class="pc-taskbar">
+      <button class="taskbar-start-button">
+        <span class="icon icon-pc"></span> Start
+      </button>
+      <button
+        class="taskbar-app-icon active"
+        id="taskbarWebLlmApp"
+        title="WebLLM Chat"
+      >
+        <span class="icon icon-app-chat"></span>
+      </button>
+      <button class="taskbar-app-icon" id="taskbarLogButton" title="Show Log">
+        <span class="icon icon-terminal"></span>
+      </button>
+      <!-- Other app icons could go here -->
+      <div class="taskbar-clock" id="taskbarClock">12:00 PM</div>
+    </div>
+
+    <!-- Dexie.js for IndexedDB operations -->
+    <script src="https://unpkg.com/dexie@3.2.4/dist/dexie.js"></script>
+
+    <!-- Load the modular JavaScript -->
+    <script type="module" src="js/index.js"></script>
+  </body>
+</html>
